@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #080808;
+            margin: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        .header {
+            background-color: #030505;
+            color: #fff;
+            padding: 5px;
+            text-align: center;
+        }
+
+        .navbar {
+            background-color: #8d61b1;
+            overflow: hidden;
+        }
+
+        .navbar a {
+            font-size: 16px;
+            color: #fdfbfd;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .navbar a:hover {
+            background-color: #555;
+        }
+
+        .poster {
+            text-align: center;
+            padding: 1px;
+            background-color: #333;
+            color: #fff;
+        }
+
+        .poster img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .content {
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #333;
+        }
+
+        .footer {
+            background-color: #0a0a0a;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .description {
+            text-align: center;
+            padding: 20px;
+            background-color: #333;
+            color: #fff;
+        }
+
+        .description h2 {
+            color: #fff;
+        }
+
+        .description p {
+            color: #fff;
+        }
+
+        input[type="file"] {
+            margin-top: 20px;
+        }
+
+        select {
+            margin-top: 20px;
+            padding: 10px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Add CSS for the previewed image to make it smaller */
+        #previewImage img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        @media (max-width: 768px) {
+            /* Adjust styling for smaller screens */
+            .container {
+                width: 100%;
+            }
+
+            .header {
+                padding: 10px;
+            }
+
+            .navbar a {
+                padding: 10px;
+            }
+
+            .content {
+                padding: 10px;
+            }
+
+            .description {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Welcome to Image Converter</h1>
+        </div>
+
+        <div class="navbar">
+            <a href="#home">Home</a>
+            <a href="#aboutus">About Us</a>
+            <a href="#contactus">Contact Us</a>
+            <a href="#privacypolicy">Privacy Policy</a>
+        </div>
+
+        <div class="poster">
+            <img src="C:\Users\Dell\Desktop\extra1\.vscode\i2.jpg" alt="Poster Image">
+        </div>
+
+        <div class="content">
+            <input type="file" id="uploadImage" accept="image/*">
+            <select id="selectFormat">
+                <option value="png">PNG</option>
+                <option value="jpg">JPG</option>
+                <option value="jpeg">JPEG</option>
+                <option value="gif">GIF</option>
+                <option value="bmp">BMP</option>
+            </select>
+            <button onclick="convertImage()">Convert and Preview</button>
+            <button onclick="downloadImage()" id="downloadButton" style="display: none;">Download Image</button>
+            <button onclick="resetImage()">Convert Another Image</button>
+            <br>
+            <div id="previewImage"></div>
+        </div>
+
+        <div class="description">
+            <h2>How to Convert Image Format</h2>
+            <p>1. Choose an image file by clicking the "Browse" button.</p>
+            <p>2. Select the desired output format from the dropdown list.</p>
+            <p>3. Click the "Convert and Preview" button to see the converted image.</p>
+            <p>4. If you're satisfied with the preview, click the "Download Image" button to save it.</p>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2023 Image Converter</p>
+        </div>
+    </div>
+
+    <script>
+        function convertImage() {
+            const uploadImage = document.getElementById('uploadImage');
+            const selectFormat = document.getElementById('selectFormat').value;
+            const previewImage = document.getElementById('previewImage');
+
+            if (uploadImage.files.length > 0) {
+                const file = uploadImage.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const image = document.createElement('img');
+                    image.src = e.target.result;
+                    previewImage.innerHTML = '';
+                    previewImage.appendChild(image);
+                    document.getElementById('downloadButton').style.display = 'block';
+                };
+
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function downloadImage() {
+            const uploadImage = document.getElementById('uploadImage');
+            const selectFormat = document.getElementById('selectFormat').value;
+
+            if (uploadImage.files.length > 0) {
+                const file = uploadImage.files[0];
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(file);
+                a.download = `converted_image.${selectFormat}`;
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                URL.revokeObjectURL(a.href);
+                document.body.removeChild(a);
+            }
+        }
+
+        function resetImage() {
+            const uploadImage = document.getElementById('uploadImage');
+            const previewImage = document.getElementById('previewImage');
+            const downloadButton = document.getElementById('downloadButton');
+
+            uploadImage.value = ''; // Clear the file input
+            previewImage.innerHTML = ''; // Clear the preview
+            downloadButton.style.display = 'none'; // Hide the download button
+        }
+    </script>
+</body>
+</html>
